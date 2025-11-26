@@ -2,6 +2,7 @@ apiVersion: dapr.io/v1alpha1
 kind: Configuration
 metadata:
   name: dapr-config
+  namespace: default
 spec:
   mtls:
     enabled: false
@@ -11,5 +12,13 @@ spec:
     sentryAddress: "dapr-sentry.dapr-system.svc.cluster.local:80"
   tracing:
     samplingRate: "1"
-    zipkin:
-      endpointAddress: "http://zipkin:9411/api/v2/spans"
+    otel:
+      endpointAddress: "otel-collector.default.svc.cluster.local:4317"
+      isSecure: false
+      protocol: grpc
+  metric:
+    enabled: true
+  logging:
+    apiLogging:
+      enabled: true
+      obfuscateURLs: false

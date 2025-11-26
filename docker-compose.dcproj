@@ -11,6 +11,11 @@
     </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
+    <None Include="k8s\jaeger-deployment.yaml" />
+    <None Include="k8s\otel-collector-config.yaml" />
+    <None Include="k8s\otel-collector-deployment.yaml" />
+    <None Include="k8s\otel-collector-service.yaml" />
+    <None Include="k8s\OTEL-DEPLOYMENT.md" />
     <None Include="k8s\rabbitmq-pvc.yaml" />
   </ItemGroup>
 </Project>

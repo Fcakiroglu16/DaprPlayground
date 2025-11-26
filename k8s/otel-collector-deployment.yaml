@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otel-collector
+  namespace: default
+  labels:
+    app: otel-collector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: otel-collector
+  template:
+    metadata:
+      labels:
+        app: otel-collector
+    spec:
+      containers:
+      - name: otel-collector
+        image: otel/opentelemetry-collector-contrib:latest
+        command:
+          - "/otelcol-contrib"
+          - "--config=/conf/otel-collector-config.yaml"
+        ports:
+        - containerPort: 4317  # OTLP gRPC receiver
+          name: otlp-grpc
+          protocol: TCP
+        - containerPort: 4318  # OTLP HTTP receiver
+          name: otlp-http
+          protocol: TCP
+        - containerPort: 8888  # Prometheus metrics exposed by the collector
+          name: metrics
+          protocol: TCP
+        - containerPort: 8889  # Prometheus exporter
+          name: prometheus
+          protocol: TCP
+        - containerPort: 13133 # Health check extension
+          name: health-check
+          protocol: TCP
+        - containerPort: 55679 # ZPages extension
+          name: zpages
+          protocol: TCP
+        volumeMounts:
+        - name: otel-collector-config-vol
+          mountPath: /conf
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 200m
+            memory: 256Mi
+      volumes:
+      - name: otel-collector-config-vol
+        configMap:
+          name: otel-collector-config
+          items:
+            - key: otel-collector-config.yaml
+              path: otel-collector-config.yaml
