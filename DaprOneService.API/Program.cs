@@ -1,4 +1,6 @@
+using System.Diagnostics;
 using Dapr.Client;
+using DaprOneService.API;
 using DaprPlayground.Events;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -25,6 +27,17 @@ if (app.Environment.IsDevelopment())
 // Get products from DaprTwoService via Dapr service invocation
 app.MapGet("/products", async (DaprClient daprClient) =>
 {
+
+    using (var activity= ActivitySourceProvider.ActivitySource.StartActivity("Method1"))
+    {
+        await Task.Delay(1000);
+    }
+    
+    using (var activity= ActivitySourceProvider.ActivitySource.StartActivity("Method2"))
+    {
+        await Task.Delay(1000);
+    }
+    
     Product[] products = await daprClient.InvokeMethodAsync<Product[]>(
         HttpMethod.Get,
         "daprtwo-service-api",
@@ -49,6 +62,8 @@ app.MapPost("/users", async (CreateUserRequest request, DaprClient daprClient) =
 
     return Results.Ok(new { UserId = userId, Message = "User created and event published" });
 }).WithName("CreateUser");
+
+ActivitySourceProvider.ActivitySource = new ActivitySource(builder.Environment.ApplicationName);
 
 app.Run();
 

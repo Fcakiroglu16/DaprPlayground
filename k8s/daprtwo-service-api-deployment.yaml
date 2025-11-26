@@ -43,8 +43,12 @@ spec:
         - containerPort: 8080
           name: http
         env:
+        - name: AppID
+          value: "daprtwo-service-api"
         - name: ASPNETCORE_URLS
           value: "http://+:8080"
         - name: ASPNETCORE_ENVIRONMENT
           value: "Production"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://otel-collector.default.svc.cluster.local:4317"
         imagePullPolicy: Never

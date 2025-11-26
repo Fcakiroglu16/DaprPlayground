@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ServiceDiscovery;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
 namespace Microsoft.Extensions.Hosting;
@@ -61,6 +62,14 @@ public static class Extensions
             })
             .WithTracing(tracing =>
             {
+
+                tracing.ConfigureResource(configure =>
+                {
+
+                    configure.AddService(builder.Configuration["AppID"]!);
+
+                });
+                
                 tracing.AddSource(builder.Environment.ApplicationName)
                     .AddAspNetCoreInstrumentation(tracing =>
                         // Exclude health check requests from tracing
