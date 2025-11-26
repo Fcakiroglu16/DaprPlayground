@@ -7,6 +7,8 @@ spec:
     enabled: false
     workloadCertTTL: "24h"
     allowedClockSkew: "15m"
+    controlPlaneTrustDomain: "cluster.local"
+    sentryAddress: "dapr-sentry.dapr-system.svc.cluster.local:80"
   tracing:
     samplingRate: "1"
     zipkin:

@@ -1,6 +1,6 @@
 using CommunityToolkit.Aspire.Hosting.Dapr;
 
-var builder = DistributedApplication.CreateBuilder(args);
+IDistributedApplicationBuilder builder = DistributedApplication.CreateBuilder(args);
 
 var componentsPath = Path.Combine(builder.AppHostDirectory, "dapr", "components");
 
@@ -8,14 +8,14 @@ var componentsPath = Path.Combine(builder.AppHostDirectory, "dapr", "components"
 builder.AddProject<Projects.DaprOneService_API>("daproneservice-api")
     .WithDaprSidecar(new DaprSidecarOptions
     {
-        AppId = "daproneservice-api",
+        AppId = "daprone-service-api",
         ResourcesPaths = [componentsPath]
     });
 
 builder.AddProject<Projects.DaprTwoService_API>("daprtwoservice-api")
     .WithDaprSidecar(new DaprSidecarOptions
     {
-        AppId = "daprtwoservice-api",
+        AppId = "daprtwo-service-api",
         ResourcesPaths = [componentsPath]
     });
 

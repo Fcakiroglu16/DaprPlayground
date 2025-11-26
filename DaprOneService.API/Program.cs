@@ -1,7 +1,7 @@
 using Dapr.Client;
 using DaprPlayground.Events;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
@@ -12,7 +12,7 @@ builder.Services.AddDaprClient();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 app.MapDefaultEndpoints();
 
@@ -25,33 +25,33 @@ if (app.Environment.IsDevelopment())
 // Get products from DaprTwoService via Dapr service invocation
 app.MapGet("/products", async (DaprClient daprClient) =>
 {
-    var products = await daprClient.InvokeMethodAsync<Product[]>(
+    Product[] products = await daprClient.InvokeMethodAsync<Product[]>(
         HttpMethod.Get,
-        "daprtwoservice-api",
+        "daprtwo-service-api",
         "products");
-    
+
     return Results.Ok(products);
 }).WithName("GetProductsFromServiceTwo");
 
 // Endpoint to create a user and publish event
 app.MapPost("/users", async (CreateUserRequest request, DaprClient daprClient) =>
 {
-    var userId = Guid.NewGuid();
-    var userCreatedEvent = new UserCreatedEvent(
+    Guid userId = Guid.NewGuid();
+    UserCreatedEvent userCreatedEvent = new UserCreatedEvent(
         userId,
         request.UserName,
         request.Email,
         DateTime.UtcNow
     );
-    
+
     // Publish event to Dapr pub/sub
     await daprClient.PublishEventAsync("pubsub", "user-created", userCreatedEvent);
-    
+
     return Results.Ok(new { UserId = userId, Message = "User created and event published" });
 }).WithName("CreateUser");
 
 app.Run();
 
-record Product(int Id, string Name, string Description, decimal Price);
+internal record Product(int Id, string Name, string Description, decimal Price);
 
-record CreateUserRequest(string UserName, string Email);
+internal record CreateUserRequest(string UserName, string Email);
