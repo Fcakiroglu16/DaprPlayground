@@ -1,3 +1,6 @@
+using Dapr;
+using DaprPlayground.Events;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
@@ -23,6 +26,18 @@ app.MapGet("/weatherforecast", () =>
     var forecast = Enumerable.Range(1, 5).Select(index => new WeatherForecast(DateOnly.FromDateTime(DateTime.Now.AddDays(index)), Random.Shared.Next(-20, 55), summaries[Random.Shared.Next(summaries.Length)])).ToArray();
     return forecast;
 }).WithName("GetWeatherForecast");
+
+// Subscribe to UserCreatedEvent
+app.MapPost("/user-created", [Topic("pubsub", "user-created")] async (UserCreatedEvent userEvent, ILogger<Program> logger) =>
+{
+    logger.LogInformation("Received UserCreatedEvent: UserId={UserId}, UserName={UserName}, Email={Email}, CreatedAt={CreatedAt}",
+        userEvent.UserId, userEvent.UserName, userEvent.Email, userEvent.CreatedAt);
+    
+    // Process the event here (e.g., send welcome email, create user profile, etc.)
+    await Task.CompletedTask;
+    
+    return Results.Ok();
+}).WithTopic("pubsub", "user-created");
 
 app.Run();
 

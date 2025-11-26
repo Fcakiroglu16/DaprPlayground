@@ -7,11 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0"/>
+        <PackageReference Include="Dapr.AspNetCore" Version="1.16.1" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\DaprPlayground.ServiceDefaults\DaprPlayground.ServiceDefaults.csproj" />
+      <ProjectReference Include="..\DaprPlayground.Events\DaprPlayground.Events.csproj" />
     </ItemGroup>
 
 </Project>

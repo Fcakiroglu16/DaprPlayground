@@ -4,3 +4,14 @@ GET {{DaprOneService.API_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+### Create User and Publish UserCreatedEvent
+POST {{DaprOneService.API_HostAddress}}/users
+Content-Type: application/json
+
+{
+  "userName": "John Doe",
+  "email": "john.doe@example.com"
+}
+
+###
