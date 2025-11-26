@@ -1,4 +1,7 @@
 @DaprTwoService.API_HostAddress = http://localhost:5076
 
+### Get Products (direct call)
+GET {{DaprTwoService.API_HostAddress}}/products
+Accept: application/json
 
 ###

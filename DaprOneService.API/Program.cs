@@ -22,6 +22,17 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+// Get products from DaprTwoService via Dapr service invocation
+app.MapGet("/products", async (DaprClient daprClient) =>
+{
+    var products = await daprClient.InvokeMethodAsync<Product[]>(
+        HttpMethod.Get,
+        "daprtwoservice-api",
+        "products");
+    
+    return Results.Ok(products);
+}).WithName("GetProductsFromServiceTwo");
+
 // Endpoint to create a user and publish event
 app.MapPost("/users", async (CreateUserRequest request, DaprClient daprClient) =>
 {
@@ -41,5 +52,6 @@ app.MapPost("/users", async (CreateUserRequest request, DaprClient daprClient) =
 
 app.Run();
 
+record Product(int Id, string Name, string Description, decimal Price);
 
 record CreateUserRequest(string UserName, string Email);

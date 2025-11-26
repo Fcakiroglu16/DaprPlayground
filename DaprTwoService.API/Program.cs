@@ -19,6 +19,21 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+// Get Products endpoint
+app.MapGet("/products", () =>
+{
+    var products = new[]
+    {
+        new Product(1, "Laptop", "High-performance laptop", 1299.99m),
+        new Product(2, "Mouse", "Wireless ergonomic mouse", 29.99m),
+        new Product(3, "Keyboard", "Mechanical keyboard", 89.99m),
+        new Product(4, "Monitor", "27-inch 4K monitor", 449.99m),
+        new Product(5, "Headphones", "Noise-cancelling headphones", 199.99m)
+    };
+    
+    return Results.Ok(products);
+}).WithName("GetProducts");
+
 // Subscribe to UserCreatedEvent
 app.MapPost("/user-created", [Topic("pubsub", "user-created")] async (UserCreatedEvent userEvent, ILogger<Program> logger) =>
 {
@@ -32,3 +47,5 @@ app.MapPost("/user-created", [Topic("pubsub", "user-created")] async (UserCreate
 }).WithTopic("pubsub", "user-created");
 
 app.Run();
+
+record Product(int Id, string Name, string Description, decimal Price);
