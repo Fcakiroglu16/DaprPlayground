@@ -1,9 +1,5 @@
 @DaprOneService.API_HostAddress = http://localhost:5015
 
-GET {{DaprOneService.API_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
 
 ### Create User and Publish UserCreatedEvent
 POST {{DaprOneService.API_HostAddress}}/users
