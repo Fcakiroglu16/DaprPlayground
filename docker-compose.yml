@@ -1,0 +1,13 @@
+services:
+  daproneservice.api:
+    image: ${DOCKER_REGISTRY-}daproneserviceapi
+    build:
+      context: .
+      dockerfile: DaprOneService.API/Dockerfile
+
+  daprtwoservice.api:
+    image: ${DOCKER_REGISTRY-}daprtwoserviceapi
+    build:
+      context: .
+      dockerfile: DaprTwoService.API/Dockerfile
+

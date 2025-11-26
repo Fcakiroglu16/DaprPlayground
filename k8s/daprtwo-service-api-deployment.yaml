@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: daprtwo-service-api
+  labels:
+    app: daprtwo-service-api
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: daprtwo-service-api
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: daprtwo-service-api
+  labels:
+    app: daprtwo-service-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: daprtwo-service-api
+  template:
+    metadata:
+      labels:
+        app: daprtwo-service-api
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "daprtwo-service-api"
+        dapr.io/app-port: "8080"
+        dapr.io/config: "dapr-config"
+        dapr.io/log-level: "debug"
+    spec:
+      containers:
+      - name: daprtwo-service-api
+        image: daprtwoserviceapi:latest
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: ASPNETCORE_URLS
+          value: "http://+:8080"
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Production"
+        imagePullPolicy: Never
