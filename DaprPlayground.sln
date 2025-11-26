@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DaprOneService.API", "DaprOneService.API\DaprOneService.API.csproj", "{199E0064-3038-4702-97B7-B5DDB52EC71E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DaprTwoService.API", "DaprTwoService.API\DaprTwoService.API.csproj", "{32940431-40B5-48FA-AFFB-682D38FD93C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DaprPlayground.AppHost", "DaprPlayground.AppHost\DaprPlayground.AppHost.csproj", "{10F40D5F-B20F-4D80-8955-D0A54F36FD57}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DaprPlayground.ServiceDefaults", "DaprPlayground.ServiceDefaults\DaprPlayground.ServiceDefaults.csproj", "{B206A209-B37F-4B1E-A338-714D0483AE1B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{199E0064-3038-4702-97B7-B5DDB52EC71E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{199E0064-3038-4702-97B7-B5DDB52EC71E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{199E0064-3038-4702-97B7-B5DDB52EC71E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{199E0064-3038-4702-97B7-B5DDB52EC71E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32940431-40B5-48FA-AFFB-682D38FD93C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32940431-40B5-48FA-AFFB-682D38FD93C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32940431-40B5-48FA-AFFB-682D38FD93C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32940431-40B5-48FA-AFFB-682D38FD93C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10F40D5F-B20F-4D80-8955-D0A54F36FD57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10F40D5F-B20F-4D80-8955-D0A54F36FD57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10F40D5F-B20F-4D80-8955-D0A54F36FD57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10F40D5F-B20F-4D80-8955-D0A54F36FD57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B206A209-B37F-4B1E-A338-714D0483AE1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B206A209-B37F-4B1E-A338-714D0483AE1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B206A209-B37F-4B1E-A338-714D0483AE1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B206A209-B37F-4B1E-A338-714D0483AE1B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

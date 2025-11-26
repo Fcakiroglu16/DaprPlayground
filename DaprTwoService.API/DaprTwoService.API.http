@@ -1,0 +1,6 @@
+@DaprTwoService.API_HostAddress = http://localhost:5076
+
+GET {{DaprTwoService.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

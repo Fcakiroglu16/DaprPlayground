@@ -1,0 +1,6 @@
+@DaprOneService.API_HostAddress = http://localhost:5015
+
+GET {{DaprOneService.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
