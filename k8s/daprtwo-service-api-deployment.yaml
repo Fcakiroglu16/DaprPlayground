@@ -44,7 +44,7 @@ spec:
           name: http
         env:
         - name: AppID
-          value: "daprtwo-service-api"
+          value: "daprtwo-service-api-microservice"
         - name: ASPNETCORE_URLS
           value: "http://+:8080"
         - name: ASPNETCORE_ENVIRONMENT

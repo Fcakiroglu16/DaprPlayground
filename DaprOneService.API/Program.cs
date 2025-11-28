@@ -25,7 +25,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // Get products from DaprTwoService via Dapr service invocation
-app.MapGet("/products", async (DaprClient daprClient) =>
+app.MapGet("/products", async (DaprClient daprClient,ILogger<Product> logger) =>
 {
 
     using (var activity= ActivitySourceProvider.ActivitySource.StartActivity("Method1"))
@@ -38,11 +38,15 @@ app.MapGet("/products", async (DaprClient daprClient) =>
         await Task.Delay(1000);
     }
     
+    //logging
+    logger.LogInformation("Invoking DaprTwoService to get products");
     Product[] products = await daprClient.InvokeMethodAsync<Product[]>(
         HttpMethod.Get,
         "daprtwo-service-api",
         "products");
 
+
+    logger.LogInformation("Resulting DaprTwoService to get products");
     return Results.Ok(products);
 }).WithName("GetProductsFromServiceTwo");
 

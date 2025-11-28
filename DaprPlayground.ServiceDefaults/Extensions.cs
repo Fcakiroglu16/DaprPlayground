@@ -5,6 +5,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ServiceDiscovery;
 using OpenTelemetry;
+using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -69,7 +70,7 @@ public static class Extensions
                     configure.AddService(builder.Configuration["AppID"]!);
 
                 });
-                
+
                 tracing.AddSource(builder.Environment.ApplicationName)
                     .AddAspNetCoreInstrumentation(tracing =>
                         // Exclude health check requests from tracing
@@ -80,6 +81,17 @@ public static class Extensions
                     // Uncomment the following line to enable gRPC instrumentation (requires the OpenTelemetry.Instrumentation.GrpcNetClient package)
                     //.AddGrpcClientInstrumentation()
                     .AddHttpClientInstrumentation();
+            }).WithLogging(loggingBuilder =>
+            {
+
+                loggingBuilder.ConfigureResource(configure =>
+                {
+
+                    configure.AddService(builder.Configuration["AppID"]!);
+
+                });
+
+
             });
 
         builder.AddOpenTelemetryExporters();

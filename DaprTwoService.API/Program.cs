@@ -1,7 +1,7 @@
-﻿using System.Diagnostics;
-using Dapr;
+﻿using Dapr;
 using DaprPlayground.Events;
 using DaprTwoService.API;
+using System.Diagnostics;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -25,20 +25,21 @@ app.UseCloudEvents();
 app.MapSubscribeHandler();
 
 // Get Products endpoint
-app.MapGet("/products", async () =>
+app.MapGet("/products", async (ILogger<Product> logger) =>
 {
-    
-    using (var activity= ActivitySourceProvider.ActivitySource.StartActivity("Method3"))
+
+    using (Activity? activity = ActivitySourceProvider.ActivitySource.StartActivity("Method3"))
     {
         await Task.Delay(1000);
     }
-    
-    using (var activity= ActivitySourceProvider.ActivitySource.StartActivity("Method4"))
+
+    using (Activity? activity = ActivitySourceProvider.ActivitySource.StartActivity("Method4"))
     {
         await Task.Delay(1000);
     }
-    
-    
+
+    logger.LogInformation("Returning static list of products");
+
     Product[] products = new[]
     {
         new Product(1, "Laptop", "High-performance laptop", 1299.99m),

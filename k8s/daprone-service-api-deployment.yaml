@@ -44,7 +44,7 @@ spec:
           name: http
         env:
         - name: AppID
-          value: "daprone-service-api"
+          value: "daprone-service-api-microservice"
         - name: ASPNETCORE_URLS
           value: "http://+:8080"
         - name: ASPNETCORE_ENVIRONMENT

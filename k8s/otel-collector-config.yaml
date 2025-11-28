@@ -19,22 +19,25 @@ data:
               scrape_interval: 10s
               static_configs:
                 - targets: ['localhost:8888']
-    
+
     processors:
       batch:
-    
     exporters:
       # Prometheus exporter
       prometheus:
         endpoint: "0.0.0.0:8889"
         namespace: dapr
-      
-      # OTLP exporter (Jaeger için)
+  
+      # OTLP exporter (Jaeger iÃ§in)
       otlp:
         endpoint: jaeger-collector:4317
         tls:
           insecure: true
-    
+      
+      # Azure Application Insights exporter
+      azuremonitor:
+        connection_string: "InstrumentationKey=0b258967-12fb-44ab-b818-8d4f3f6cb72b;IngestionEndpoint=https://germanywestcentral-1.in.applicationinsights.azure.com/;LiveEndpoint=https://germanywestcentral.livediagnostics.monitor.azure.com/;ApplicationId=ac7835cc-4c6c-47f5-ade4-a51b6919ae5f"
+
     extensions:
       health_check:
         endpoint: 0.0.0.0:13133
@@ -42,15 +45,20 @@ data:
         endpoint: 0.0.0.0:1777
       zpages:
         endpoint: 0.0.0.0:55679
-    
+
     service:
       extensions: [health_check, pprof, zpages]
       pipelines:
         traces:
           receivers: [otlp]
           processors: [batch]
-          exporters: [otlp]
+          exporters: [otlp, azuremonitor]
         metrics:
           receivers: [otlp, prometheus]
           processors: [batch]
-          exporters: [prometheus]
+          exporters: [prometheus, azuremonitor]
+        logs:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [azuremonitor]
+          
