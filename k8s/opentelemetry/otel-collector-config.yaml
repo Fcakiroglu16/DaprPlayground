@@ -36,7 +36,7 @@ data:
       
       # Azure Application Insights exporter
       azuremonitor:
-        connection_string: "InstrumentationKey=0b258967-12fb-44ab-b818-8d4f3f6cb72b;IngestionEndpoint=https://germanywestcentral-1.in.applicationinsights.azure.com/;LiveEndpoint=https://germanywestcentral.livediagnostics.monitor.azure.com/;ApplicationId=ac7835cc-4c6c-47f5-ade4-a51b6919ae5f"
+        connection_string: "InstrumentationKey=YOUR_INSTRUMENTATION_KEY"
 
     extensions:
       health_check:
