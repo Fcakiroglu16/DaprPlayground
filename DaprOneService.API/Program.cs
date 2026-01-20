@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Dapr.Client;
 using DaprPlayground.Events;
 using Observability;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +17,9 @@ var app = builder.Build();
 
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) app.MapOpenApi();
 
+app.MapOpenApi();
+app.MapScalarApiReference();
 // Get products from DaprTwoService via Dapr service invocation
 app.MapGet("/products", async (DaprClient daprClient, ILogger<Product> logger) =>
 {

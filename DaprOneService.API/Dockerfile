@@ -12,8 +12,8 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["DaprOneService.API/DaprOneService.API.csproj", "DaprOneService.API/"]
-COPY ["DaprPlayground.ServiceDefaults/DaprPlayground.ServiceDefaults.csproj", "DaprPlayground.ServiceDefaults/"]
 COPY ["DaprPlayground.Events/DaprPlayground.Events.csproj", "DaprPlayground.Events/"]
+COPY ["Observability/Observability.csproj", "Observability/"]
 RUN dotnet restore "./DaprOneService.API/DaprOneService.API.csproj"
 COPY . .
 WORKDIR "/src/DaprOneService.API"
