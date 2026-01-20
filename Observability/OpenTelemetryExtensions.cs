@@ -29,16 +29,7 @@ public static class OpenTelemetryExtensions
                     resource.AddService(openTelemetryConstants.ServiceName,
                         serviceVersion: openTelemetryConstants.ServiceVersion);
                 });
-            options.AddAspNetCoreInstrumentation(aspnetcoreOptions =>
-            {
-                aspnetcoreOptions.Filter = context =>
-                {
-                    if (!string.IsNullOrEmpty(context.Request.Path.Value))
-                        return context.Request.Path.Value.Contains("api", StringComparison.InvariantCulture);
-
-                    return false;
-                };
-            });
+            options.AddAspNetCoreInstrumentation(aspnetcoreOptions => { });
 
             options.AddEntityFrameworkCoreInstrumentation();
 
@@ -55,8 +46,6 @@ public static class OpenTelemetryExtensions
                 configure.AddService(openTelemetryConstants.ServiceName,
                     serviceVersion: openTelemetryConstants.ServiceVersion);
             });
-
-            metricsBuilder.AddConsoleExporter();
             metricsBuilder.AddOtlpExporter();
         }).WithLogging(loggingBuilder =>
         {

@@ -18,4 +18,8 @@
     <None Include="k8s\OTEL-DEPLOYMENT.md" />
     <None Include="k8s\rabbitmq-pvc.yaml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="k8s\dapr\components\pubsub-rabbitmq.yaml" />
+    <Content Include="k8s\dapr\dapr-config.yaml" />
+  </ItemGroup>
 </Project>
