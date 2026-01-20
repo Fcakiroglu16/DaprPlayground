@@ -1,46 +1,39 @@
 using System.Diagnostics;
 using Dapr.Client;
-using DaprOneService.API;
 using DaprPlayground.Events;
+using Observability;
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
-builder.AddServiceDefaults();
-
+builder.Services.AddObservabilityExt(builder.Configuration);
 // Add Dapr client
 builder.Services.AddDaprClient();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+var app = builder.Build();
 
-WebApplication app = builder.Build();
-
-app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+if (app.Environment.IsDevelopment()) app.MapOpenApi();
 
 // Get products from DaprTwoService via Dapr service invocation
-app.MapGet("/products", async (DaprClient daprClient,ILogger<Product> logger) =>
+app.MapGet("/products", async (DaprClient daprClient, ILogger<Product> logger) =>
 {
+    using (var activity = ActivitySourceProvider.Source.StartActivity("Method1"))
+    {
+        await Task.Delay(1000);
+    }
 
-    using (var activity= ActivitySourceProvider.ActivitySource.StartActivity("Method1"))
+    using (var activity = ActivitySourceProvider.Source.StartActivity("Method2"))
     {
         await Task.Delay(1000);
     }
-    
-    using (var activity= ActivitySourceProvider.ActivitySource.StartActivity("Method2"))
-    {
-        await Task.Delay(1000);
-    }
-    
+
     //logging
     logger.LogInformation("Invoking DaprTwoService to get products");
-    Product[] products = await daprClient.InvokeMethodAsync<Product[]>(
+    var products = await daprClient.InvokeMethodAsync<Product[]>(
         HttpMethod.Get,
         "daprtwo-service-api",
         "products");
@@ -53,8 +46,8 @@ app.MapGet("/products", async (DaprClient daprClient,ILogger<Product> logger) =>
 // Endpoint to create a user and publish event
 app.MapPost("/users", async (CreateUserRequest request, DaprClient daprClient) =>
 {
-    Guid userId = Guid.NewGuid();
-    UserCreatedEvent userCreatedEvent = new UserCreatedEvent(
+    var userId = Guid.NewGuid();
+    var userCreatedEvent = new UserCreatedEvent(
         userId,
         request.UserName,
         request.Email,
@@ -67,7 +60,7 @@ app.MapPost("/users", async (CreateUserRequest request, DaprClient daprClient) =
     return Results.Ok(new { UserId = userId, Message = "User created and event published" });
 }).WithName("CreateUser");
 
-ActivitySourceProvider.ActivitySource = new ActivitySource(builder.Environment.ApplicationName);
+ActivitySourceProvider.Source = new ActivitySource(builder.Environment.ApplicationName);
 
 app.Run();
 

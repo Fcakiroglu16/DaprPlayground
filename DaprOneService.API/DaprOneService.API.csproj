@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DaprPlayground.ServiceDefaults\DaprPlayground.ServiceDefaults.csproj" />
+      <ProjectReference Include="..\..\Observability\Observability.csproj" />
       <ProjectReference Include="..\DaprPlayground.Events\DaprPlayground.Events.csproj" />
     </ItemGroup>
 

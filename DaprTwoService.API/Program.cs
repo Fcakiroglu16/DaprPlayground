@@ -1,46 +1,38 @@
-﻿using Dapr;
+﻿using System.Diagnostics;
+using Dapr;
 using DaprPlayground.Events;
-using DaprTwoService.API;
-using System.Diagnostics;
+using Observability;
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
-builder.AddServiceDefaults();
+builder.Services.AddObservabilityExt(builder.Configuration);
 builder.Services.AddOpenApi();
 
-WebApplication app = builder.Build();
+var app = builder.Build();
 
-app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+if (app.Environment.IsDevelopment()) app.MapOpenApi();
 
-// DAPR için kritik - CloudEvents desteği
 app.UseCloudEvents();
-
-// DAPR subscription handler - Bu mutlaka olmalı
 app.MapSubscribeHandler();
 
 // Get Products endpoint
 app.MapGet("/products", async (ILogger<Product> logger) =>
 {
-
-    using (Activity? activity = ActivitySourceProvider.ActivitySource.StartActivity("Method3"))
+    using (var activity = ActivitySourceProvider.Source.StartActivity("Method3"))
     {
         await Task.Delay(1000);
     }
 
-    using (Activity? activity = ActivitySourceProvider.ActivitySource.StartActivity("Method4"))
+    using (var activity = ActivitySourceProvider.Source.StartActivity("Method4"))
     {
         await Task.Delay(1000);
     }
 
     logger.LogInformation("Returning static list of products");
 
-    Product[] products = new[]
+    var products = new[]
     {
         new Product(1, "Laptop", "High-performance laptop", 1299.99m),
         new Product(2, "Mouse", "Wireless ergonomic mouse", 29.99m),
@@ -54,16 +46,16 @@ app.MapGet("/products", async (ILogger<Product> logger) =>
 
 // Subscribe to UserCreatedEvent - WithTopic kaldırıldı
 app.MapPost("/user-created",
-    [Topic("pubsub", "user-created")]
-async (UserCreatedEvent userEvent, ILogger<Program> logger) =>
-{
-    logger.LogInformation("Received UserCreatedEvent: UserId={UserId}, UserName={UserName}, Email={Email}, CreatedAt={CreatedAt}",
-        userEvent.UserId, userEvent.UserName, userEvent.Email, userEvent.CreatedAt);
+    [Topic("pubsub", "user-created")] async (UserCreatedEvent userEvent, ILogger<Program> logger) =>
+    {
+        logger.LogInformation(
+            "Received UserCreatedEvent: UserId={UserId}, UserName={UserName}, Email={Email}, CreatedAt={CreatedAt}",
+            userEvent.UserId, userEvent.UserName, userEvent.Email, userEvent.CreatedAt);
 
-    await Task.CompletedTask;
-    return Results.Ok();
-});
-ActivitySourceProvider.ActivitySource = new ActivitySource(builder.Environment.ApplicationName);
+        await Task.CompletedTask;
+        return Results.Ok();
+    });
+ActivitySourceProvider.Source = new ActivitySource(builder.Environment.ApplicationName);
 app.Run();
 
 internal record Product(int Id, string Name, string Description, decimal Price);

@@ -1,6 +1,8 @@
-﻿namespace OpenTelemetryShared;
+﻿using System.Diagnostics;
 
-public class ActivitySourceProvider
+namespace OpenTelemetryShared;
+
+public static class ActivitySourceProvider
 {
-    
+    public static ActivitySource Source = null!;
 }
