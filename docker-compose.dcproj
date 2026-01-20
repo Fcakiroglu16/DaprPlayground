@@ -20,6 +20,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="k8s\dapr\components\pubsub-rabbitmq.yaml" />
+    <Content Include="k8s\dapr\components\statestore-redis.yaml" />
     <Content Include="k8s\dapr\dapr-config.yaml" />
+    <Content Include="k8s\redis-deployment.yaml" />
+    <Content Include="k8s\redis-service.yaml" />
   </ItemGroup>
 </Project>

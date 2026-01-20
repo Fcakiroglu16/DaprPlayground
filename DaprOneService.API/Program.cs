@@ -62,6 +62,34 @@ app.MapPost("/users", async (CreateUserRequest request, DaprClient daprClient) =
     return Results.Ok(new { UserId = userId, Message = "User created and event published" });
 }).WithName("CreateUser");
 
+// Cache'e veri kaydetme endpoint'i
+app.MapPost("/cache/{key}", async (string key, CacheItem item, DaprClient daprClient, ILogger<Program> logger) =>
+{
+    logger.LogInformation("Saving key {Key} to cache", key);
+    
+    await daprClient.SaveStateAsync("statestore", key, item);
+    
+    logger.LogInformation("Key {Key} saved successfully", key);
+    return Results.Ok(new { Message = "Cache item saved successfully", Key = key });
+}).WithName("SetCache");
+
+// Cache'den veri okuma endpoint'i
+app.MapGet("/cache/{key}", async (string key, DaprClient daprClient, ILogger<Program> logger) =>
+{
+    logger.LogInformation("Retrieving key {Key} from cache", key);
+    
+    var cachedItem = await daprClient.GetStateAsync<CacheItem>("statestore", key);
+    
+    if (cachedItem == null)
+    {
+        logger.LogWarning("Key {Key} not found in cache", key);
+        return Results.NotFound(new { Message = "Key not found in cache", Key = key });
+    }
+    
+    logger.LogInformation("Key {Key} retrieved successfully", key);
+    return Results.Ok(cachedItem);
+}).WithName("GetCache");
+
 ActivitySourceProvider.Source = new ActivitySource(builder.Environment.ApplicationName);
 
 app.Run();
@@ -69,3 +97,5 @@ app.Run();
 internal record Product(int Id, string Name, string Description, decimal Price);
 
 internal record CreateUserRequest(string UserName, string Email);
+
+internal record CacheItem(string Value, DateTime CreatedAt);
