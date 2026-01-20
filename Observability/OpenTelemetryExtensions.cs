@@ -1,10 +1,14 @@
-﻿using System.Diagnostics;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using System.Diagnostics;
 
-namespace OpenTelemetryShared;
+namespace Observability;
 
 public static class OpenTelemetryExtensions
 {
@@ -14,7 +18,8 @@ public static class OpenTelemetryExtensions
         services.Configure<OpenTelemetryConstants>(configuration.GetSection("OpenTelemetry"));
         var openTelemetryConstants = configuration.GetSection("OpenTelemetry").Get<OpenTelemetryConstants>()!;
 
-        ActivitySourceProvider.Source = new ActivitySource(openTelemetryConstants.ActivitySourceName);
+        ActivitySourceProvider.Source =
+            new ActivitySource(openTelemetryConstants.ActivitySourceName);
 
         services.AddOpenTelemetry().WithTracing(options =>
         {
@@ -30,6 +35,7 @@ public static class OpenTelemetryExtensions
                 {
                     if (!string.IsNullOrEmpty(context.Request.Path.Value))
                         return context.Request.Path.Value.Contains("api", StringComparison.InvariantCulture);
+
                     return false;
                 };
             });
@@ -39,7 +45,30 @@ public static class OpenTelemetryExtensions
             options.AddHttpClientInstrumentation();
             options.AddConsoleExporter();
             options.AddOtlpExporter();
+        }).WithMetrics(metricsBuilder =>
+        {
+            metricsBuilder.AddAspNetCoreInstrumentation()
+                .AddHttpClientInstrumentation()
+                .AddRuntimeInstrumentation();
+            metricsBuilder.ConfigureResource(configure =>
+            {
+                configure.AddService(openTelemetryConstants.ServiceName,
+                    serviceVersion: openTelemetryConstants.ServiceVersion);
+            });
+
+            metricsBuilder.AddConsoleExporter();
+            metricsBuilder.AddOtlpExporter();
+        }).WithLogging(loggingBuilder =>
+        {
+            loggingBuilder.ConfigureResource(configure =>
+            {
+                configure.AddService(openTelemetryConstants.ServiceName,
+                    serviceVersion: openTelemetryConstants.ServiceVersion);
+            });
+            loggingBuilder.AddConsoleExporter();
+            loggingBuilder.AddOtlpExporter();
         });
+
 
         return services;
     }

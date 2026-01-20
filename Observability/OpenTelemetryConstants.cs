@@ -1,4 +1,4 @@
-﻿namespace OpenTelemetryShared;
+﻿namespace Observability;
 
 public class OpenTelemetryConstants
 {

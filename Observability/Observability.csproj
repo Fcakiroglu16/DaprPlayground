@@ -5,6 +5,11 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.14.0" />
 		<PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.14.0" />
@@ -12,6 +17,6 @@
 		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.14.0" />
 		<PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.14.0-beta.2" />
 		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.14.0" />
-		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.14.0" />
 	</ItemGroup>
 </Project>

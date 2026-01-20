@@ -15,8 +15,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Observability\Observability.csproj" />
       <ProjectReference Include="..\DaprPlayground.Events\DaprPlayground.Events.csproj" />
+      <ProjectReference Include="..\Observability\Observability.csproj" />
     </ItemGroup>
 
 </Project>

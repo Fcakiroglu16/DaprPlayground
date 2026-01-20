@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace OpenTelemetryShared;
+namespace Observability;
 
 public static class ActivitySourceProvider
 {
